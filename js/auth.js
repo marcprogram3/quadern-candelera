@@ -82,7 +82,15 @@ const Auth = (() => {
   async function restoreSession() {
     const { data } = await sb().auth.getSession();
     if (!data.session) return false;
-    user = data.session.user;
+    // La sessió guardada pot ser d'un usuari que l'administrador ja ha donat de
+    // baixa: es comprova amb el servidor abans de fer-la servir.
+    const { data: checked, error } = await sb().auth.getUser();
+    if (error && [401, 403, 404].includes(error.status)) {
+      await sb().auth.signOut({ scope: 'local' }).catch(() => {});
+      return false;
+    }
+    if (error) throw new Error(friendly(error, 'No s’ha pogut comprovar la sessió.'));
+    user = checked.user;
     await loadProfile();
     watchIdle();
     return true;
@@ -129,6 +137,13 @@ const Auth = (() => {
 
   async function createNotebook(initial) {
     const { error } = await sb().from('notebooks').insert({ user_id: user.id, data: initial, version: 1 });
+    // Ja existia (p. ex. creat des d'una altra pestanya): es carrega el que hi ha.
+    if (error?.code === '23505') return (await loadNotebook()) ?? initial;
+    // L'usuari de la sessió ja no existeix (s'ha donat de baixa): cal tornar a entrar.
+    if (error?.code === '23503') {
+      await logout('La sessió ja no era vàlida perquè l’usuari s’ha donat de baixa o s’ha tornat a crear. Torneu a entrar.');
+      return new Promise(() => {}); // la pàgina es recarrega
+    }
     if (error) throw new Error(friendly(error, 'No s’ha pogut crear el quadern.'));
     version = 1;
     return initial;
