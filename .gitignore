@@ -1,0 +1,5 @@
+# Imatges originals sense optimitzar (l'app fa servir les de img/)
+fons-login-*.png
+
+# Text de treball, no forma part de l'app
+PROMPT.md

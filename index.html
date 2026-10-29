@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quadern de notes · Institut Candelera</title>
+  <link rel="icon" href="LogoCandelera.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app" class="app"><p class="booting">Carregant…</p></div>
+
+  <!-- Biblioteques externes (versions fixades). -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+  <!-- Codi de l'app. L'ordre importa: cada fitxer fa servir els anteriors. -->
+  <script src="js/config.js"></script>    <!-- connexió amb Supabase: s'omple en instal·lar -->
+  <script src="js/calc.js"></script>      <!-- càlcul de notes (funcions pures) -->
+  <script src="js/store.js"></script>     <!-- dades i desament local -->
+  <script src="js/seed.js"></script>      <!-- dades d'exemple fictícies -->
+  <script src="js/ui.js"></script>        <!-- utilitats d'interfície -->
+  <script src="js/auth.js"></script>      <!-- sessió i desament a Supabase -->
+  <script src="js/charts.js"></script>    <!-- gràfics -->
+  <script src="js/app.js"></script>       <!-- estructura i navegació -->
+  <script src="js/pages/login.js"></script>
+  <script src="js/pages/grid.js"></script>
+  <script src="js/pages/students.js"></script>
+  <script src="js/pages/detail.js"></script>
+  <script src="js/pages/analytics.js"></script>
+  <script src="js/pages/settings.js"></script>
+  <script src="js/pages/transfer.js"></script>
+  <script>App.boot();</script>
+</body>
+</html>
